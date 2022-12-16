@@ -1,15 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
 import classNames from "classnames/bind";
 import MovingIcon from '@mui/icons-material/Moving';
 
-import styles from './TripComponent.module.scss';
-import Button from '../Button';
+import styles from './TrainComponent.module.scss';
+import Button from "../Button";
 
 const cx = classNames.bind(styles)
 
-function TripComponent({ data }) {
+function TrainComponent({ data }) {
 
-  const timeDeparture = data.gioKhoiHanh.slice(11, 19)
+  const timeDeparture = data.maLichTrinh.gioKhoiHanh.slice(11, 19)
   const oldHoursDep = timeDeparture.slice(0, 2)
   localStorage.setItem('oldHoursDep', oldHoursDep)
   const hoursDep = +timeDeparture.slice(0, 2) + 7
@@ -19,7 +18,7 @@ function TripComponent({ data }) {
 
   const timeDepartureFinal = timeDeparture.replace(`${oldHoursDep}`, `${newHoursDep}`)
 
-  const timeDestination = data.gioKetThuc.slice(11, 19)
+  const timeDestination = data.maLichTrinh.gioKetThuc.slice(11, 19)
   const oldHoursDes = timeDestination.slice(0, 2)
   localStorage.setItem('oldHoursDes', oldHoursDes)
   const hoursDes = +timeDestination.slice(0, 2) + 7
@@ -34,33 +33,24 @@ function TripComponent({ data }) {
   const hours = (+difference - minute)/60
 
   const handleChoose = () => {
-    console.log(data.maLichTrinh)
-    localStorage.setItem('maLichTrinhDuocChon', data.maLichTrinh)
-    window.location.href = `http://localhost:3000/home/trip/trips`
+    localStorage.setItem('maSoTauDuocChon', data.maSoTau.maSoTau)
   }
 
   return (
     <div className={cx('wrapper')}>
-      <div className={cx('info')}>
-        <div className={cx('left')}>
-          <h4>{data.tenGaDi}</h4>
-          <p>{timeDepartureFinal}</p>
-        </div>
-        <div className={cx('main')}>
-          <p>{`${hours}h${minute}m`}</p>
-          <MovingIcon />
-        </div>
-        <div className={cx('right')}>
-          <h4>{data.tenGaDen}</h4>
-          <p>{timeDestinationFinal}</p>
-        </div>
+      <div className={cx('name')}>
+        <h3>{data.tenTau}</h3>
+        <h3>{data.maSoTau.maSoTau}</h3>
+      </div>
+      <br />
+      <div className={cx('details')}>
+        <h4>Giờ đi: {timeDepartureFinal}</h4>
+        <h4>Giờ đến: {timeDestinationFinal}</h4>
       </div>
 
-      <div className={cx('btn')}>
-        <Button primary small onClick={handleChoose}>Chọn</Button>
-      </div>
+      <Button primary onClick={handleChoose}>Chọn</Button>
     </div>
   )
 }
 
-export default TripComponent;
+export default TrainComponent;

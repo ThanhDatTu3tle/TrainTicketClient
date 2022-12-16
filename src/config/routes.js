@@ -5,6 +5,7 @@ const routes = {
   refund: '/refund',
 
   trip: '/home/trip',
+  trips: '/home/trip/trips',
 }
   
 export default routes;

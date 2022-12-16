@@ -1,0 +1,30 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 30px;
+  margin-left: 20px;
+  border-radius: 30px;
+  padding: 10px;
+  width: 200px;
+  height: 200px;
+  background: rgb(255, 255, 255);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 15%);
+
+  .name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: fit-content;
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80%;
+    height: fit-content;
+  }
+}

@@ -10,6 +10,7 @@ import Check from '../pages/Check/Check';
 import Refund from '../pages/Refund/Refund';
 
 import Trip from '../pages/Trip/Trip';
+import Trips from '../pages/Trips';
 
 const publicRoutes = [
   { path: config.routes.home, component: Home, layout: MainLayout },
@@ -18,6 +19,7 @@ const publicRoutes = [
   { path: config.routes.refund, component: Refund, layout: MainLayout },
 
   { path: config.routes.trip, component: Trip, layout: MainLayout },
+  { path: config.routes.trips, component: Trips, layout: MainLayout },
 ]
 
 const privateRoutes = []
