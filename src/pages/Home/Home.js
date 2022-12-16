@@ -1,8 +1,7 @@
+import { useEffect, useRef, useState } from 'react';
 import * as React from 'react';
-import dayjs from 'dayjs';
 import { Radio } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import DirectionsTransitFilledIcon from '@mui/icons-material/DirectionsTransitFilled';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -15,14 +14,39 @@ const cx = classNames.bind(styles)
 
 function Home() {
 
-  const [value, setValue] = React.useState(dayjs('2014-08-18T21:11:54'));
+  const today = new Date()
+  let year = today.getFullYear()
+  let month = today.getMonth() + 1
+  let day = today.getDate()
+  const [value, setValue] = useState(`${year}-${month}-${day}`);
 
-  const handleChange = (newValue) => {
-    setValue(newValue);
+  const handleChange = (value) => {
+    setValue(value)
+    let monthCurr = value.$d.toString().slice(4, 7)
+    let dayCurr = value.$d.toString().slice(8, 10)
+
+    if (monthCurr === 'Dec') {
+      monthCurr = 12
+    }
+
+    let dateChosen = `2022-${monthCurr}-${dayCurr}`
+    localStorage.setItem('ngayDiDuocChon', dateChosen)
   };
 
-  const handleSearch = () => {
-    console.log('Tìm kiếm vé')
+  const handleSearch = async () => {
+    await console.log(localStorage.getItem('ngayDiDuocChon'))
+    await console.log(localStorage.getItem('gaDi'))
+    await console.log(localStorage.getItem('gaDen'))
+
+    window.location.href=`http://localhost:3000/home/trip`
+  }
+
+  const handleChangeDeparture = (e) => {
+    localStorage.setItem('gaDi', e.target.value)
+  } 
+
+  const handleChangeDestination = (e) => {
+    localStorage.setItem('gaDen', e.target.value)
   }
 
   return (
@@ -34,8 +58,8 @@ function Home() {
       <div className={cx('ticket')}>
         <div className={cx('left-ticket')}>
           <div className={cx('options')}>
-            <Radio />Một chiều / khứ hồi
-            <Radio />Nhiều thành phố
+            <Radio checked={true}/>Một chiều
+            <Radio />Khứ hồi
           </div>
           <br />
           <div className={cx('points')}>
@@ -47,7 +71,7 @@ function Home() {
                   width={30}
                   height={30}
                 />
-                <TextField id="outlined-basic" label="Ga đi" variant="outlined" inputProps={{style: {fontSize: 15, width: 180}}} />
+                <TextField id="outlined-basic" label="Ga đi" onChange={handleChangeDeparture} variant="outlined" inputProps={{style: {fontSize: 15, width: 180}}} />
               </div>
             </div>
 
@@ -59,7 +83,7 @@ function Home() {
                   width={30}
                   height={30}
                 />
-                <TextField id="outlined-basic" label="Ga đến" variant="outlined" inputProps={{style: {fontSize: 15, width: 180}}} />
+                <TextField id="outlined-basic" label="Ga đến" onChange={handleChangeDestination} variant="outlined" inputProps={{style: {fontSize: 15, width: 180}}} />
               </div>
             </div>
           </div>
@@ -70,7 +94,8 @@ function Home() {
               <div className={cx('field')}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DesktopDatePicker
-                    inputFormat="MM/DD/YYYY"
+                    // inputRef={dateRef}
+                    inputFormat="DD-MM-YYYY"
                     value={value}
                     onChange={handleChange}
                     renderInput={(params) => <TextField {...params} />}
@@ -79,7 +104,7 @@ function Home() {
               </div>
             </div>
 
-            <div className={cx('destination')}> 
+            {/* <div className={cx('destination')}> 
               <h3>Ngày về</h3>
               <div className={cx('field')}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -87,11 +112,12 @@ function Home() {
                     inputFormat="MM/DD/YYYY"
                     value={value}
                     onChange={handleChange}
+                    defaultCalendarMonth={null}
                     renderInput={(params) => <TextField {...params} />}
                   />
                 </LocalizationProvider>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -105,18 +131,6 @@ function Home() {
             Mở bản đồ
           </div>
           <div className={cx('passenger')}>
-            <h3>Số hành khách</h3>
-            <div className={cx('field')}>
-              <img
-                src="https://d1785e74lyxkqq.cloudfront.net/_next/static/v2/d/d58ded0ccea323c570f772fecbcd87d7.svg"
-                width={30}
-                height={30}
-              />
-              <TextField id="outlined-basic" label="Số hành khách" variant="outlined" inputProps={{style: {fontSize: 15, width: 500}}} />
-            </div>
-          </div>
-          <br />
-          <div className={cx('passenger')}>
             <h3>Hạng ghế</h3>
             <div className={cx('field')}>
               <img
@@ -127,7 +141,7 @@ function Home() {
               <TextField id="outlined-basic" label="Hạng ghế" variant="outlined" inputProps={{style: {fontSize: 15, width: 500}}} />
             </div>
           </div>
-          <br />
+
           <Button primary onClick={handleSearch}>Tìm kiếm vé</Button>
         </div>
       </div>
